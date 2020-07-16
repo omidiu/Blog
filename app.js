@@ -22,9 +22,9 @@ try {
 
 
 const indexRouter = require('./routes/index');
-const usersRouter = require('./routes/users');
-const signUpRouter = require('./routes/signup');
-const loginRouter = require('./routes/login');
+const userRouter = require('./routes/user');
+const commentRouter = require('./routes/comment');
+
 
 const { log } = require('console');
 
@@ -41,9 +41,9 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
-app.use('/signup', signUpRouter);
-app.use('/login', loginRouter);
+app.use('/users', userRouter);
+app.use('/comments', commentRouter);
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
