@@ -2,7 +2,7 @@ const User = require('../models/user');
 
 
 /*********************************************************************************
-* Display signup page
+* Display signup page (GET)
 **********************************************************************************/
 exports.signupPage = (req, res) => {
   res.send("Not implemented yet: render signup.ejs page"); 
@@ -12,7 +12,7 @@ exports.signupPage = (req, res) => {
 
 
 /*********************************************************************************
-* Display login page
+* Display login page (GET)
 **********************************************************************************/
 exports.loginPage = (req, res) => {
   res.send('Not implemented yet: render login.ejs page');
@@ -21,28 +21,11 @@ exports.loginPage = (req, res) => {
 
 
 
-/*********************************************************************************
-* add new Blogger
-**********************************************************************************/
-exports.addBlogger = (req, res) => {
-  res.send('Not implemented yet: add blogger after validation')
-}
-
-
-
 
 
 /*********************************************************************************
-* login Blogger
-**********************************************************************************/
-exports.loginBlogger = (req, res) => {
-  res.send('Not implemented yet: login Blogger');
-};  
-
-
-/*********************************************************************************
-* Display index.ejs (after login) 'Should render with order date'
-**********************************************************************************/
+* Display index.ejs (after login) 'Should render with order date' (GET)
+********************************************************************* *************/
 exports.mainArticlePage = (req, res) => {
   res.send('Not implemented yet: render index.ejs and show all articles')
 };  
