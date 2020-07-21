@@ -16,4 +16,16 @@ router.get('/', function(req, res, next) {
 router.post('/signup', validation.registerForm, UserController.signUpBlogger);
 
 
+
+
+
+
+/*********************************************************************************
+* login Blogger
+**********************************************************************************/
+router.post('/login', UserController.loginBlogger);
+
+
+
+
 module.exports = router;
