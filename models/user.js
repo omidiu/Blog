@@ -30,7 +30,7 @@ const UserSchema = new schema({
   password: {
     type: String,
     required: true,
-    maxlength: 30,
+    maxlength: 80, // since for hash
     minlength: 8
   },
   sex: {
