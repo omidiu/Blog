@@ -121,3 +121,53 @@ exports.registerForm = (req, res, next) => {
     
   
 }
+
+
+
+exports.loginForm = (req, res, next) => {
+  // get information from request body.
+  let {username, password} = req.body;
+
+  let userDataForLogin = {
+    username: username, 
+    password: password
+  };
+  
+  // schema
+  let schema = Joi.object().keys({
+    
+      
+    username: Joi
+              .required()
+              .messages({
+                'any.required': "username is require"
+              }),
+              
+              
+    password: Joi
+              .required()
+              .messages({
+                'any.required': "password is require"
+              }),
+
+
+    
+            
+  });
+
+  // check data is valid or not
+  let {error} = schema.validate(userDataForLogin);
+
+  // if any error send it to client (400: Bad Request)
+  if (error) return res.status(400).send(error.details[0].message);
+
+  // no error 
+  next();
+
+
+}
+
+
+
+
+  
