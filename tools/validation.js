@@ -1,5 +1,9 @@
 const Joi = require("@hapi/joi");
+const jwt = require("jsonwebtoken");
 
+/*********************************************************************************
+* Validate register form
+**********************************************************************************/
 exports.registerForm = (req, res, next) => {
   // get information from request body.
   let {firstName, lastName, username, password, password_confirmation, sex, mobile} = req.body;
@@ -113,8 +117,8 @@ exports.registerForm = (req, res, next) => {
   // check data is valid or not
   let {error} = schema.validate(userDataForRegister);
 
-  // if any error send it to client (400: Bad Request)
-  if (error) return res.status(400).send(error.details[0].message);
+  // if any error render "pages/signup" with proper error message
+  if (error) return res.render('pages/signup', {message: error.details[0].message});
 
   // no error 
   next();
@@ -124,65 +128,25 @@ exports.registerForm = (req, res, next) => {
 
 
 
-exports.loginForm = (req, res, next) => {
-  // get information from request body.
-  let {username, password} = req.body;
 
-  let userDataForLogin = {
-    username: username, 
-    password: password
-  };
-  
-  // schema
-  let schema = Joi.object().keys({
-    
-      
-    username: Joi
-              .required()
-              .messages({
-                'any.required': "username is require"
-              }),
-              
-              
-    password: Joi
-              .required()
-              .messages({
-                'any.required': "password is require"
-              }),
-
-
-    
-            
-  });
-
-  // check data is valid or not
-  let {error} = schema.validate(userDataForLogin);
-
-  // if any error send it to client (400: Bad Request)
-  if (error) return res.status(400).send(error.details[0].message);
-
-  // no error 
-  next();
-
-
-}
 
 
 /*********************************************************************************
 * For all route except "users/login" and "users/signup"
 **********************************************************************************/
-exports.authenticateToken = async(req, res, next) => {
+exports.authenticateToken = (req, res, next) => {
   
   // get token on cookie
   const token = req.cookies["token"];
 
-  // if no token sets
-  if (token == null) return res.redirect('/users/login') // no token means user should login or register first
 
+  // if no token sets
+  if (token == null) return res.redirect('/login') // no token means user should login or register first
+  
 
   // check token is valid or not
-  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
-    if (err) return res.redirect('/users/login');  // user should login
+  jwt.verify(token, process.env.TOKEN_SECRET, (err, user) => {
+    if (err) return res.redirect('/login');  // user should login
 
     // set req.user for next middleware
     req.user = user;
@@ -201,19 +165,19 @@ exports.authenticateToken = async(req, res, next) => {
 /*********************************************************************************
 * For just "users/login" and "users/signup" route.
 **********************************************************************************/
-exports.redirectToMainPageWithValidtoken = async(req, res, next) => {
+exports.redirectToMainPageWithValidtoken = (req, res, next) => {
 
   // Gather the jwt access token from the request header
   const token = req.cookies["token"];
-  if (token == null) next(); // no token means user should login or register
+  if (token == null) return next(); // no token means user should login or register
 
 
   // verify token
-  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
-    if (err) next(); // no valid token means user should login or register
+  jwt.verify(token, process.env.TOKEN_SECRET, (err, user) => {
+    if (err) return next(); // no valid token means user should login or register
     
     // should redirect user to main page
-    res.redirect('pages/articles/index'); // change later. Should pass articles in JSON.
+    res.redirect('/'); // change later. Should pass articles in JSON.
   });
     
   
