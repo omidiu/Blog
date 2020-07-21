@@ -58,15 +58,18 @@ exports.loginBlogger = async(req, res) => {
     // get information from request body.
     let {username, password} = req.body;
 
+    if (!username || !password) {
+      return res.status(400).render('pages/login', {message: "username or password shouldn't be empty"});
+    }
 
     // check user with this username exist 
     const user = await User.findOne({username: username});
-    if (!user) return res.status(400).send('This username is not exist');
+    if (!user) return res.status(400).render('pages/login', {message: "username does not exist"});
     
 
     // checkpassword correct 
     const passwordCorrect = await bcrypt.compare(password, user.password);
-    if (!passwordCorrect) return res.status(400).send('Password is not correct');
+    if (!passwordCorrect) return res.status(400).render('pages/login', {message: "password is not correct"});
 
 
     
