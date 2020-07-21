@@ -1,4 +1,7 @@
-const User = require("../models/user");
+require('dotenv').config();
+
+const User = require('../models/user');
+const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt');
 const saltRounds = 8;
 
@@ -28,8 +31,7 @@ exports.signUpBlogger = async(req, res) => {
       firstName: firstName,
       lastName: lastName, 
       username: username, 
-      password: password, 
-      password_confirmation: password_confirmation, 
+      password: hashedPassword, 
       sex: sex, 
       mobile: mobile
     });
@@ -51,8 +53,44 @@ exports.signUpBlogger = async(req, res) => {
 /*********************************************************************************
 * login Blogger (POST)
 **********************************************************************************/
-exports.loginBlogger = (req, res) => {
-  res.send('Not implemented yet: login Blogger');
+exports.loginBlogger = async(req, res) => {
+  try {
+    // get information from request body.
+    let {username, password} = req.body;
+
+
+    // check user with this username exist 
+    const user = await User.findOne({username: username});
+    if (!user) return res.status(400).send('This username is not exist');
+    
+
+    // checkpassword correct 
+    const passwordCorrect = await bcrypt.compare(password, user.password);
+    if (!passwordCorrect) return res.status(400).send('Password is not correct');
+
+
+    
+    //create and assign a token
+    const token = jwt.sign({_id : user._id,} , process.env.TOKEN_SECRET)
+    res.cookie("token", token);
+
+
+    // should change to 
+    res.send("token sent ");
+
+
+
+
+  } catch (err) {
+    console.log(err);
+    res.status(500).send(); // internal server error
+  }
+  
+
+  
+
+  
+
 };  
 
 
