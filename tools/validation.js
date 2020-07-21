@@ -168,6 +168,58 @@ exports.loginForm = (req, res, next) => {
 }
 
 
+/*********************************************************************************
+* For all route except "users/login" and "users/signup"
+**********************************************************************************/
+exports.authenticateToken = async(req, res, next) => {
+  
+  // get token on cookie
+  const token = req.cookies["token"];
+
+  // if no token sets
+  if (token == null) return res.redirect('/users/login') // no token means user should login or register first
+
+
+  // check token is valid or not
+  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+    if (err) return res.redirect('/users/login');  // user should login
+
+    // set req.user for next middleware
+    req.user = user;
+
+    // give controll to next middleware
+    next();
+  });
+    
+  
+  
+};
+
+
+
+
+/*********************************************************************************
+* For just "users/login" and "users/signup" route.
+**********************************************************************************/
+exports.redirectToMainPageWithValidtoken = async(req, res, next) => {
+
+  // Gather the jwt access token from the request header
+  const token = req.cookies["token"];
+  if (token == null) next(); // no token means user should login or register
+
+
+  // verify token
+  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+    if (err) next(); // no valid token means user should login or register
+    
+    // should redirect user to main page
+    res.redirect('pages/articles/index'); // change later. Should pass articles in JSON.
+  });
+    
+  
+  
+};
+
 
 
   
