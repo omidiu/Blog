@@ -10,8 +10,9 @@ const saltRounds = 8;
 **********************************************************************************/
 exports.signUpBlogger = async(req, res) => {
   try {
-    // get information from request body.
-    let {firstName, lastName, username, password, password_confirmation, sex, mobile} = req.body;
+    // get information from request body. (password_confirmation is not necessary anymore. 
+    // validated in previuous middleware. )
+    let {firstName, lastName, username, password, sex, mobile} = req.body;
 
     // check username exist
     const userExist = await User.findOne({username: username});
@@ -58,6 +59,7 @@ exports.loginBlogger = async(req, res) => {
     // get information from request body.
     let {username, password} = req.body;
 
+    // if username or password is empty
     if (!username || !password) {
       return res.status(400).render('pages/login', {message: "username or password shouldn't be empty"});
     }
@@ -74,7 +76,7 @@ exports.loginBlogger = async(req, res) => {
 
     
     //create and assign a token
-    const token = jwt.sign({_id : user._id,} , process.env.TOKEN_SECRET)
+    const token = jwt.sign({_id : user._id, username: username} , process.env.TOKEN_SECRET)
     res.cookie("token", token);
 
 
@@ -100,8 +102,20 @@ exports.loginBlogger = async(req, res) => {
 /*********************************************************************************
 * Display Blogger page (GET)
 **********************************************************************************/
-exports.bloggerDetail = (req, res) => {
-  res.send("Not implemented yet: render user/user.ejs"); 
+exports.bloggerDetailsPage = async (req, res) => {
+  
+  // get username
+  let { username }  = req.params;
+
+  // check username exist or not
+  let user =  await User.findOne({username: username});
+  if (!user) return res.status(404).send("Not found") // It should change to not found page.
+
+  
+  // render user profile page.
+  res.render("pages/users/index", {user: user});
+  
+
 };  
 
 
