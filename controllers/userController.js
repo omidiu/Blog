@@ -100,7 +100,7 @@ exports.loginBlogger = async(req, res) => {
 
 
 /*********************************************************************************
-* Display Blogger page (GET)
+* Display Blogger profile page (GET)
 **********************************************************************************/
 exports.bloggerDetailsPage = async (req, res) => {
   
@@ -122,8 +122,27 @@ exports.bloggerDetailsPage = async (req, res) => {
 /*********************************************************************************
 * Display edit profile page (GET)
 **********************************************************************************/
-exports.bloggerEditProfilePage = (req, res) => {
-  res.send('Not implemented yet: render user/edit.ejs');
+exports.bloggerEditProfilePage = async (req, res) => {
+  
+  // get username
+  let { username }  = req.params;
+
+  // check username exist or not
+  let user =  await User.findOne({username: username});
+  if (!user) return res.status(404).send("Not found") // It should change to not found page.
+
+
+  // user can just edit his/her profile.
+  // access denied message
+  // if user try see another blogger edit page
+  // (req.user was set in authenticateToken middleware before this)
+  if ( req.params.username !== req.user.username) return res.status(404).send('<h1>Access Denied</h1>');
+  
+  // render user profile page.
+  res.render("pages/users/edit", {user: user});
+  
+
+
 };  
 
 
