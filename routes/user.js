@@ -30,4 +30,11 @@ router.get("/:username", validation.authenticateToken, UserController.bloggerDet
 router.get("/:username/editprofile", validation.authenticateToken, UserController.bloggerEditProfilePage); 
 
 
+/*********************************************************************************
+* Edit profile page (PUT)
+**********************************************************************************/
+router.put("/:username/editprofile", validation.authenticateToken, validation.editProfileForm, UserController.editBloggerInfo);
+
+
+
 module.exports = router;
