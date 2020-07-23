@@ -18,9 +18,16 @@ router.post('/login', UserController.loginBlogger);
 
 
 /*********************************************************************************
-* Display Blogger page 
+* Display Blogger profile page 
 **********************************************************************************/
 router.get("/:username", validation.authenticateToken, UserController.bloggerDetailsPage);
+
+
+
+/*********************************************************************************
+* Display edit profile page (GET)
+**********************************************************************************/
+router.get("/:username/editprofile", validation.authenticateToken, UserController.bloggerEditProfilePage); 
 
 
 module.exports = router;
