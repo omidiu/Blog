@@ -127,6 +127,96 @@ exports.registerForm = (req, res, next) => {
 }
 
 
+/*********************************************************************************
+* Validate edit profile form
+**********************************************************************************/
+exports.editProfileForm = (req, res, next) => {
+
+  // get information from request body. (for edit profile)
+  let {firstName, lastName, sex, mobile} = req.body;
+
+
+  // create new user info object
+  let newUserInfo = {
+    firstName: firstName,
+    lastName: lastName,
+    sex: sex,
+    mobile: mobile
+  }
+
+
+  // Mobile pattern
+  let numberPattern = /^[0-9]*$/;
+
+  // Define signup form schema with specific error for each case. 
+  let schema = Joi.object().keys({
+      firstName:  Joi
+                  .string()
+                  .min(3)
+                  .max(30)
+                  .lowercase()
+                  .required()
+                  .messages({
+                    "string.base": "Firstname is not valid",
+                    'any.required': "Firstname is require",
+                    'string.min': "Your firstname should contain at least 3 character", 
+                    'string.max': "Your firstname should contain at last 30 character"
+                    
+                  }), 
+  
+  
+      lastName:   Joi
+                  .string()
+                  .min(3)
+                  .max(30)
+                  .lowercase()
+                  .required()
+                  .messages({
+                    "string.base": "Lastname is not valid",
+                    'any.required': "Lastname is require",
+                    'string.min': "Your lastname should contain at least 3 character", 
+                    'string.max': "Your lastname should contain at last 30 character"
+                  }),
+  
+                  
+     
+  
+      sex:  Joi
+            .string()
+            .valid('male', 'female')
+            .required()
+            .messages({
+              "any.only": 'Sex must be "male" or "female"', 
+              'any.required': "Sex is require"
+            }),
+  
+          
+      mobile: Joi
+              .string()
+              .min(8)
+              .regex(numberPattern)
+              .required()
+              .messages({
+                'string.min': "Your phone number should contain at least 8 digits", 
+                "string.pattern.base": "Your phone number is not valid"
+              })
+              
+  });
+
+  // check data is valid or not
+  let {error} = schema.validate(newUserInfo);
+
+  // if any error render "pages/signup" with proper error message
+  if (error) return res.status(400).render('pages/users/edit', {
+    message: error.details[0].message, 
+    messageClass: 'alert-danger'
+  });
+
+  // no error 
+  next();
+    
+  
+}
 
 
 
