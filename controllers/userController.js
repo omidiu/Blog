@@ -136,7 +136,7 @@ exports.bloggerEditProfilePage = async (req, res) => {
   // access denied message
   // if user try see another blogger edit page
   // (req.user was set in authenticateToken middleware before this)
-  if ( req.params.username !== req.user.username) return res.status(404).send('<h1>Access Denied</h1>');
+  if ( req.params.username !== req.user.username) return res.status(403).send('<h1>Access Denied</h1>');
   
   // render user profile page.
   res.render("pages/users/edit", {user: user});
@@ -151,8 +151,47 @@ exports.bloggerEditProfilePage = async (req, res) => {
 /*********************************************************************************
 * Edit profile (PUT)
 **********************************************************************************/
-exports.editBloggerInfo = (req, res) => {
-  res.send('Not implemented yet: PUT Update blogger info after validation');
+exports.editBloggerInfo = async (req, res) => {
+  try {
+    // get username
+    let { username }  = req.params;
+    let {firstName, lastName, sex, mobile} = req.body;
+
+    let newUserInfo = {
+      firstName: firstName, 
+      lastName: lastName, 
+      sex: sex, 
+      mobile: mobile
+    }
+
+    // check username exist or not
+    let user =  await User.findOne({username: username});
+    if (!user) return res.status(400).send("Bad request") // It should change to not found page.
+
+
+    // user can just edit his/her profile.
+    // access denied message
+    // if user try see another blogger edit page
+    // (req.user was set in authenticateToken middleware before this)
+    if ( req.params.username !== req.user.username) return res.status(403).send('<h1>Access Denied</h1>');
+
+
+    
+
+    let updateUserInfo = await User.findOneAndUpdate({username: username}, newUserInfo, {
+      new: true
+    });
+
+    
+    res.status(200).render("pages/users/edit", {
+      message: "edited successfully", 
+      messageClass: "alert-success"
+    });
+
+  } catch(err) {
+    return res.status(500).send(err);
+  }
+  
 };  
 
 
