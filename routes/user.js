@@ -36,5 +36,11 @@ router.get("/:username/editprofile", validation.authenticateToken, UserControlle
 router.put("/:username/editprofile", validation.authenticateToken, validation.editProfileForm, UserController.editBloggerInfo);
 
 
+/*********************************************************************************
+* change password (PUT)
+**********************************************************************************/
+router.put("/:username/editprofile/changePassword", validation.authenticateToken, validation.oldPasswordCorrect, validation.changePassForm, UserController.changePassword);
+
+
 
 module.exports = router;
