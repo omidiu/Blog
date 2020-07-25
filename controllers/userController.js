@@ -56,6 +56,7 @@ exports.signUpBlogger = async(req, res) => {
 **********************************************************************************/
 exports.loginBlogger = async(req, res) => {
   try {
+    
     // get information from request body.
     let {username, password} = req.body;
 
@@ -193,6 +194,40 @@ exports.editBloggerInfo = async (req, res) => {
   }
   
 };  
+
+
+
+exports.changePassword = async (req, res) => {
+
+  try {
+      // get new password from req.body
+    let {newPass} = req.body;
+
+    // get username
+    let username = req.user.username;
+
+    // hash new password
+    let hashedNewPassword = await bcrypt.hash(newPass, saltRounds);
+
+    // update password
+    await User.findOneAndUpdate({username: username}, {password: hashedNewPassword}); // I'll fix this
+
+
+    // successful 
+    res.status(200).render('pages/users/edit', {
+      message: "Your password updated successfully", 
+      messageClass: "alert-success"
+    })
+
+
+  } catch (err) {
+    console.log(err);
+    return res.status(500).send("<h1>Internal server error</h1>")
+  }
+  
+
+}
+
 
 
 
