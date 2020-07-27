@@ -1,13 +1,46 @@
 const Article = require("../models/article");
-const multer = require('multer');
-const {uploadImage} = require('../tools/uploadArticleAvatarImage');
+const helper = require('../tools/helpers');
+const mongoose = require('mongoose');
+
 
 /*********************************************************************************
-* Display a specific article by id (GET) (Not implemented yet)
+* Display all articles (GET) (Not implemented yet)
 **********************************************************************************/
-exports.articleDetail = (req, res) => {
+exports.allArticles = (req, res) => {
+  res.send("all articles here");
+};  
 
 
+
+
+
+/*********************************************************************************
+* Display a specific article by id (GET) (404 problem)
+**********************************************************************************/
+exports.articleDetail = async(req, res) => {
+
+  try {
+
+    // Get article id 
+    let articleId = req.params.articleId;
+
+
+    // find article 
+    let article = await Article.findOne({_id: articleId});
+
+
+    // #issue
+    // check article exist
+    if (!article) return res.status(404).send("Not found");
+
+    res.send(article); // should change to (render article page)
+
+
+  } catch(err) {
+    console.log(err);
+    res.status(500).send("Error occured !")
+  }
+  
 
 };  
 
