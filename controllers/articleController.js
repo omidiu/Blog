@@ -1,6 +1,8 @@
 const Article = require("../models/article");
+const User = require('../models/user');
 const helper = require('../tools/helpers');
 const mongoose = require('mongoose');
+const { find } = require("../models/article");
 
 
 /*********************************************************************************
@@ -25,6 +27,43 @@ exports.allArticles = async(req, res) => {
 
 
 
+/*********************************************************************************
+* Display all user's articles (Everyone) (GET) 
+**********************************************************************************/
+exports.authorArticles = async(req, res) => {
+
+  try {
+    
+    // Get username of Author
+    let authorUsername = req.params.authorUsername;
+
+    // Get author information 
+    let author = await User.findOne({"username": authorUsername});
+    if (!author) return res.status(404).render("pages/notfound") // if author not exist
+
+
+    // check author articles
+    let articles = await Article.find({author: author.id});
+    res.status(200).render('pages/articles/specificAuthorArticles', {
+      articles, 
+      author
+    });
+
+
+
+
+
+
+  } catch (err) {
+    console.log(err);
+    res.status(500).send("Error occurred !")
+  }
+  
+
+  
+
+
+};  
 
 
 /*********************************************************************************
