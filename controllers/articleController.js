@@ -4,10 +4,23 @@ const mongoose = require('mongoose');
 
 
 /*********************************************************************************
-* Display all articles (GET) (Not implemented yet)
+* Display all articles (GET)
 **********************************************************************************/
-exports.allArticles = (req, res) => {
-  res.send("all articles here");
+exports.allArticles = async(req, res) => {
+
+  try {
+
+    // Get all articles (may limit later)
+    let articles = await Article.find({});
+
+    return res.send(articles);
+
+  } catch (err) {
+    console.log(err);
+    res.status(500).send("Something went wrong!")
+  }
+  
+
 };  
 
 
