@@ -13,6 +13,12 @@ router.get('/', validation.authenticateToken, ArticleController.allArticles)
 
 
 
+/*********************************************************************************
+* Display all user's articles (GET)
+**********************************************************************************/
+router.get('/:authorUsername', validation.authenticateToken, ArticleController.authorArticles)
+
+
 
 /*********************************************************************************
 * Display a specific article by id (GET) (404 problem)
