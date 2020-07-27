@@ -5,10 +5,17 @@ const ArticleController = require("../controllers/articleController");
 const validation = require("../tools/validation");
 
 
+/*********************************************************************************
+* Display all articles (limit later) (GET)
+**********************************************************************************/
+router.get('/', validation.authenticateToken, ArticleController.allArticles)
+
+
+
 
 
 /*********************************************************************************
-* Display a specific article by id (GET)
+* Display a specific article by id (GET) (404 problem)
 **********************************************************************************/
 router.get("/:articleId", validation.authenticateToken, ArticleController.articleDetail);
 
