@@ -37,11 +37,8 @@ router.get("/article/newArticle", validation.authenticateToken, ArticleControlle
 
 
 
-
-
-
 /*********************************************************************************
-* Display a specific article by id (GET) (404 problem)
+* Display a specific article by id (GET)
 **********************************************************************************/
 router.get("/article/:articleId", validation.authenticateToken, ArticleController.articleDetail);
 
