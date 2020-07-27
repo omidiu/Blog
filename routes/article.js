@@ -29,6 +29,13 @@ router.get('/:authorUsername', validation.authenticateToken, ArticleController.a
 
 
 
+/*********************************************************************************
+* Display a add new article page (GET) 
+**********************************************************************************/
+router.get("/article/newArticle", validation.authenticateToken, ArticleController.addNewArticlePage); 
+
+
+
 
 
 
@@ -36,7 +43,12 @@ router.get('/:authorUsername', validation.authenticateToken, ArticleController.a
 /*********************************************************************************
 * Display a specific article by id (GET) (404 problem)
 **********************************************************************************/
-router.get("/:articleId", validation.authenticateToken, ArticleController.articleDetail);
+router.get("/article/:articleId", validation.authenticateToken, ArticleController.articleDetail);
+
+
+
+
+
 
 
 
