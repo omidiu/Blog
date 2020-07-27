@@ -14,9 +14,22 @@ router.get('/', validation.authenticateToken, ArticleController.allArticles)
 
 
 /*********************************************************************************
-* Display all user's articles (GET)
+* Display user's articles (logged in author) (GET) 
+**********************************************************************************/
+router.get('/myArticles', validation.authenticateToken, ArticleController.userArticles)
+
+
+
+/*********************************************************************************
+* Display all author's articles (GET)
 **********************************************************************************/
 router.get('/:authorUsername', validation.authenticateToken, ArticleController.authorArticles)
+
+
+
+
+
+
 
 
 
