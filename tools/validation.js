@@ -2,7 +2,7 @@ const Joi = require("@hapi/joi");
 const jwt = require("jsonwebtoken");
 const User = require('../models/user');
 const bcrypt = require('bcrypt');
-
+const {uploadImage} = require('./uploadArticleAvatarImage');
 
 /*********************************************************************************
 **********************************************************************************
@@ -396,13 +396,58 @@ exports.redirectToMainPageWithValidtoken = (req, res, next) => {
 **********************************************************************************
 **********************************************************************************/
 
-exports.addArticleForm = (req, res, next) => {
+exports.addArticleFormImage = (req, res, next) => {
+
+  // Define upload  (single avatar for article)
+  let upload = uploadImage.single('avatar');
+
+  upload(req, res, (err) => {
+    
+    // Get information (for rendering again with previous "title" and "description")
+    let {title, description} = req.body
+
+    if (err){ 
+      res.render('pages/articles/newArticle', {
+        message: err, 
+        messageClass: 'alert-danger', 
+        title, 
+        description
+      })
+    } else {
+      if (typeof req.file === 'undefined') {
+        return res.render('pages/articles/newArticle', {
+          message: "Error: No File selected",
+          messageClass: "alert-danger",
+          title, 
+          description
+        })
+      } else {
+        res.locals.filename = req.file.filename;
+        next()
+      }
+      
+    }
+    
+    
+  });
+  
+  // next called inside the upload (last else)
+
+};  
+
+
+
+
+
+
+exports.addArticleFormText = (req, res, next) => {
+
   // Get information from request body.
   let {title, description} = req.body;
 
 
   // Define article info
-  let newArticle = {
+  let newArticleText = {
     title,
     description, 
   }
@@ -448,7 +493,7 @@ exports.addArticleForm = (req, res, next) => {
 
   
   // check data is valid or not
-  let {error} = schema.validate(newArticle);
+  let {error} = schema.validate(newArticleText);
 
 
 
@@ -461,14 +506,4 @@ exports.addArticleForm = (req, res, next) => {
 
   // no error 
   next();
-
-};  
-
-
-
-  
-
-
-  
-    
-  
+};
