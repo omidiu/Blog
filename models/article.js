@@ -26,8 +26,9 @@ const articleSchema = new schema({
     required: true
   },
 
-  mainImageSrc: {
+  avatarSrc: {
     type: String,
+    required: true
   },
 
   createdAt: {
