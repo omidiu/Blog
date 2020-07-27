@@ -2,7 +2,7 @@ const Article = require("../models/article");
 const User = require('../models/user');
 const helper = require('../tools/helpers');
 const mongoose = require('mongoose');
-const { find } = require("../models/article");
+
 
 
 /*********************************************************************************
@@ -110,25 +110,35 @@ exports.userArticles = async (req, res) => {
 
 
 /*********************************************************************************
-* Display a specific article by id (GET) (404 problem)
+* Display a specific article by id (GET)
 **********************************************************************************/
 exports.articleDetail = async(req, res) => {
 
   try {
 
+
     // Get article id 
+    // let articleId = req.params.articleId;
     let articleId = req.params.articleId;
 
+    // check id is valid or not
+    if (!mongoose.Types.ObjectId.isValid(articleId)) res.status(400).send("Bad Request");
 
+    
     // find article 
-    let article = await Article.findOne({_id: articleId});
+    let article = await Article.findById({_id: articleId});
+    if (!article) res.status(404).render("pages/Notfound") // if article is empty
+
+
 
 
     // #issue
     // check article exist
     if (!article) return res.status(404).send("Not found");
 
-    res.send(article); // should change to (render article page)
+    res.status(200).render('pages/articles/oneArticle', {
+      article
+    }); // should change to (render article page)
 
 
   } catch(err) {
