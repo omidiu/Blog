@@ -4,6 +4,15 @@ const User = require('../models/user');
 const bcrypt = require('bcrypt');
 
 
+/*********************************************************************************
+**********************************************************************************
+**********************************************************************************
+****************************** Users and Index ***********************************
+**********************************************************************************
+**********************************************************************************
+**********************************************************************************/
+
+
 
 /*********************************************************************************
 * Validate register form
@@ -224,8 +233,6 @@ exports.editProfileForm = (req, res, next) => {
 
 
 
-
-
 /*********************************************************************************
 * Validate password is correct (PUT)
 **********************************************************************************/
@@ -380,4 +387,88 @@ exports.redirectToMainPageWithValidtoken = (req, res, next) => {
 
 
 
+  
+/*********************************************************************************
+**********************************************************************************
+**********************************************************************************
+******************************     Articles    ***********************************
+**********************************************************************************
+**********************************************************************************
+**********************************************************************************/
+
+exports.addArticleForm = (req, res, next) => {
+  // Get information from request body.
+  let {title, description} = req.body;
+
+
+  // Define article info
+  let newArticle = {
+    title,
+    description, 
+  }
+
+
+  // Define article form schema with specific error for each case. 
+  let schema = Joi.object().keys({
+
+    title:      
+                Joi
+                .string()
+                .min(3)
+                .max(30)
+                .lowercase()
+                .required()
+                .messages({
+                  "string.base": "Title is not valid",
+                  'any.required': "Title is require",
+                  'string.min': "Your title should contain at least 3 character", 
+                  'string.max': "Your title should contain at last 30 character"
+                }), 
+
+
+
+                
+    description: 
+              Joi
+              .string()
+              .min(10)
+              .required()
+              .messages({
+                "string.base": "Description is not valid",
+                'any.required': "Description is require",
+                'string.min': "Your description should contain at least 3 character", 
+                'string.max': "Your description should contain at last 30 character"                
+              }),
+              
+              
+   
+
+            
+  });
+
+  
+  // check data is valid or not
+  let {error} = schema.validate(newArticle);
+
+
+
+  // if any error render "pages/articles/newArticle" with proper error message
+  if (error) return res.status(400).render('pages/articles/newArticle', {
+    message: error.details[0].message, 
+    messageClass: 'alert-danger'
+  });
+
+
+  // no error 
+  next();
+
+};  
+
+
+
+  
+
+
+  
+    
   
