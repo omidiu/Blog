@@ -5,17 +5,6 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 
 
-
-// chane
-const formData = require("express-form-data");
-const os = require('os');
-
-const options = {
-  uploadDir: os.tmpdir(),
-  autoClean: true
-};
-
-
 // require mongoose 
 const mongoose = require("mongoose");
 mongoose.set('useCreateIndex', true); // for deprecatin warning
@@ -54,14 +43,6 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 
-// parse data with connect-multiparty. 
-app.use(formData.parse(options));
-// delete from the request all empty files (size == 0)
-app.use(formData.format());
-// change the file objects to fs.ReadStream 
-app.use(formData.stream());
-// union the body and the files
-app.use(formData.union());
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
