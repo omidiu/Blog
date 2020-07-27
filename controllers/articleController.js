@@ -145,10 +145,10 @@ exports.articleDetail = async(req, res) => {
 
 
 /*********************************************************************************
-* Display a add new article page (GET) (Not implemented yet)
+* Display a add new article page (GET) 
 **********************************************************************************/
 exports.addNewArticlePage = (req, res) => {
-  res.send(`Not implemented yet: render "article/newArticle.ejs" `);
+  res.render("pages/articles/newArticle");
 };  
 
 
