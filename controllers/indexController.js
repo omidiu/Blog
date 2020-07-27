@@ -7,7 +7,7 @@ const User = require('../models/user');
 * Display index.ejs (after login) 'Should render with order date' (GET)
 ********************************************************************* *************/
 exports.mainArticlePage = (req, res) => {
-  res.render('pages/articles/index');
+  res.redirect('/articles');
 }; 
 
 
