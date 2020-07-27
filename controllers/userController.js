@@ -197,6 +197,9 @@ exports.editBloggerInfo = async (req, res) => {
 
 
 
+/*********************************************************************************
+* Change password (PUT)
+**********************************************************************************/
 exports.changePassword = async (req, res) => {
 
   try {
@@ -230,15 +233,21 @@ exports.changePassword = async (req, res) => {
 
 
 
-
-
-
 /*********************************************************************************
-* Display Blogger's articles page (GET)
+* Display Blogger's articles page (GET) (Not implemented yet)
 **********************************************************************************/
 exports.bloggerArticles = (req, res) => {
   res.send('Not implemented yet: render user/articles.ejs');
 };
+
+
+
+/*********************************************************************************
+* Upload Blogger's profile image POST (Not implemented yet)
+**********************************************************************************/
+exports.uploadImageProfile = (req, res) => {
+  res.send('Not implemented yet: render user/articles.ejs');
+}
 
 
 
