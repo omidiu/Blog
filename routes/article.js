@@ -1,7 +1,9 @@
+const {uploadImage} = require('../tools/uploadArticleAvatarImage');
 const express = require('express');
 const router = express.Router();
 const ArticleController = require("../controllers/articleController");
 const validation = require("../tools/validation");
+
 
 
 
@@ -15,7 +17,7 @@ router.get("/:articleId", validation.authenticateToken, ArticleController.articl
 /*********************************************************************************
 * Add a new article (POST)
 **********************************************************************************/
-router.post("/newArticleText", validation.authenticateToken, validation.addArticleForm, ArticleController.addNewArticleText);
+router.post("/newArticle", validation.authenticateToken, validation.addArticleFormImage, validation.addArticleFormText, ArticleController.addNewArticle);
 
 
 
