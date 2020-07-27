@@ -1,8 +1,9 @@
 const Article = require("../models/article");
-const {uploadSingleImage} = require('../tools/uploadSinglePicMulter');
+const multer = require('multer');
+const {uploadImage} = require('../tools/uploadArticleAvatarImage');
 
 /*********************************************************************************
-* Display a specific article by id (GET)
+* Display a specific article by id (GET) (Not implemented yet)
 **********************************************************************************/
 exports.articleDetail = (req, res) => {
 
@@ -16,7 +17,7 @@ exports.articleDetail = (req, res) => {
 
 
 /*********************************************************************************
-* Display a add new article page (GET)
+* Display a add new article page (GET) (Not implemented yet)
 **********************************************************************************/
 exports.addNewArticlePage = (req, res) => {
   res.send(`Not implemented yet: render "article/newArticle.ejs" `);
@@ -25,26 +26,29 @@ exports.addNewArticlePage = (req, res) => {
 
 
 /*********************************************************************************
-* Add a new article text (Title, Description) (POST)
+* Add a new article (POST) 
 **********************************************************************************/
-exports.addNewArticleText = async (req, res) => {
-  try {
-    // Get information
-    let {title, description} = req.body
-    let author = req.user._id;
+exports.addNewArticle = async (req, res, next) => {
+  
 
+  try {
+    // Get information 
+    let {title, description} = req.body;
+    let authorId = req.user._id;
+    let avatarSrc = res.locals.filename;
     
     let newArticle = new Article({
       title, 
       description, 
-      author, 
+      author: authorId,
+      avatarSrc 
     });
 
     // save newArticle
     await newArticle.save();
 
     // if article successfully add
-    return res.status(201).send("ok") // should redirect to article page
+    return res.status(201).send("article created successfully"); // should redirect to article page
 
   } catch (err){
     console.log(err);
@@ -60,18 +64,9 @@ exports.addNewArticleText = async (req, res) => {
 
 
 
-/*********************************************************************************
-* Add a new article image (POST)
-**********************************************************************************/
-exports.addNewArticleImage = async (req, res) => {
-
-}; 
-
-
-
 
 /*********************************************************************************
-* Display edit article page (GET) 
+* Display edit article page (GET) (Not implemented yet)
 **********************************************************************************/
 exports.editArticlePage = (req, res) => {
   res.send(`Not implemented yet: show article edit page (1)  ${req.params.articleId} render ` );
@@ -81,7 +76,7 @@ exports.editArticlePage = (req, res) => {
 
 
 /*********************************************************************************
-* Edit a article (PUT)
+* Edit a article (PUT) (Not implemented yet)
 **********************************************************************************/
 exports.editArticle = (req, res) => {
   res.send(`Not implemented yet: edit a specific article ${req.params.articleId}`);
@@ -90,7 +85,7 @@ exports.editArticle = (req, res) => {
 
 
 /*********************************************************************************
-* Delete a new article (DELETE)
+* Delete a new article (DELETE) (Not implemented yet)
 **********************************************************************************/
 exports.deleteArticle = (req, res) => {
   res.send(`Not implemented yet: delete a specific article ${req.params.articleId}`);
