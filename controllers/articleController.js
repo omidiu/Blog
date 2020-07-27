@@ -1,11 +1,13 @@
 const Article = require("../models/article");
-
+const {uploadSingleImage} = require('../tools/uploadSinglePicMulter');
 
 /*********************************************************************************
 * Display a specific article by id (GET)
 **********************************************************************************/
 exports.articleDetail = (req, res) => {
-  res.send(`Not implemented yet: render "article/index.ejs" ${req.params.articleId}`);
+
+
+
 };  
 
 
@@ -23,11 +25,47 @@ exports.addNewArticlePage = (req, res) => {
 
 
 /*********************************************************************************
-* Add a new article (POST)
+* Add a new article text (Title, Description) (POST)
 **********************************************************************************/
-exports.addNewArticle = (req, res) => {
-  res.send(`Not implemented yet: add a new article `);
+exports.addNewArticleText = async (req, res) => {
+  try {
+    // Get information
+    let {title, description} = req.body
+    let author = req.user._id;
+
+    
+    let newArticle = new Article({
+      title, 
+      description, 
+      author, 
+    });
+
+    // save newArticle
+    await newArticle.save();
+
+    // if article successfully add
+    return res.status(201).send("ok") // should redirect to article page
+
+  } catch (err){
+    console.log(err);
+    return res.status(500).send("Error Occured !")
+  }
+    
+  
+
+  
+
+  
 };
+
+
+
+/*********************************************************************************
+* Add a new article image (POST)
+**********************************************************************************/
+exports.addNewArticleImage = async (req, res) => {
+
+}; 
 
 
 
