@@ -28,7 +28,7 @@ exports.allArticles = async(req, res) => {
 
 
 /*********************************************************************************
-* Display all user's articles (Everyone) (GET) 
+* Display all author's articles (Everyone) (GET) 
 **********************************************************************************/
 exports.authorArticles = async(req, res) => {
 
@@ -41,12 +41,16 @@ exports.authorArticles = async(req, res) => {
     let author = await User.findOne({"username": authorUsername});
     if (!author) return res.status(404).render("pages/notfound") // if author not exist
 
+    let authorObject = author.toObject();
+
+    delete authorObject.password; // remove password
+
 
     // check author articles
     let articles = await Article.find({author: author.id});
     res.status(200).render('pages/articles/specificAuthorArticles', {
       articles, 
-      author
+      authorObject
     });
 
 
@@ -58,12 +62,51 @@ exports.authorArticles = async(req, res) => {
     console.log(err);
     res.status(500).send("Error occurred !")
   }
-  
-
-  
 
 
+};
+
+
+
+
+
+
+/*********************************************************************************
+* Display user's articles (logged in author) (GET) 
+**********************************************************************************/
+exports.userArticles = async (req, res) => {
+
+  try {
+
+    // Get author username
+    let authorId = req.user._id; 
+
+    // Get author
+    let author = await User.findOne({_id: authorId})
+    let authorObject = author.toObject();
+    
+    delete authorObject.password;
+
+    // Get author articles 
+    let articles = await Article.find({author: authorId});
+    res.status(200).render('pages/articles/userArticles', {
+      articles, 
+      authorObject
+    })
+
+
+  } catch (err) {
+    console.log(err);
+    res.status(500).send("Err occurred")
+  }
 };  
+
+
+
+
+
+
+
 
 
 /*********************************************************************************
