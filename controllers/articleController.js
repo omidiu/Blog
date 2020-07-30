@@ -204,10 +204,46 @@ exports.addNewArticle = async (req, res, next) => {
 
 
 /*********************************************************************************
-* Display edit article page (GET) (Not implemented yet)
+* Display edit article page (GET)
 **********************************************************************************/
-exports.editArticlePage = (req, res) => {
-  res.send(`Not implemented yet: show article edit page (1)  ${req.params.articleId} render ` );
+exports.editArticlePage = async (req, res) => {
+  
+  try {
+
+    // Get article id 
+    // let articleId = req.params.articleId;
+    let articleId = req.params.articleId;
+
+    // check id is valid or not
+    if (!mongoose.Types.ObjectId.isValid(articleId)) return res.status(400).send("Bad Request");
+
+    
+    // find article 
+    let article = await Article.findById({_id: articleId});
+    if (!article) res.status(404).render("pages/Notfound"); // if article is not exist.
+
+
+
+    // get author id (string)
+    let authorId = req.user._id
+    
+
+
+    // check user have permission to edit or not
+    if (article.author._id != authorId) return res.status(403).send('<h1>Access Denied</h1>');
+
+
+
+    
+    res.status(200).render('pages/articles/oneArticle', {
+      article
+    }); // should change to (render article page)
+
+
+  } catch(err) {
+    console.log(err);
+    res.status(500).send("Error occured !")
+  }
 };
 
 
