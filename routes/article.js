@@ -45,6 +45,12 @@ router.get("/article/:articleId", validation.authenticateToken, ArticleControlle
 
 
 
+/*********************************************************************************
+* Display a edit article page by id (GET)
+**********************************************************************************/
+router.get("/article/:articleId/edit", validation.authenticateToken, ArticleController.editArticlePage);
+
+
 
 
 
