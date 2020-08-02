@@ -14,14 +14,34 @@ exports.signUpBlogger = async(req, res) => {
     // validated in previuous middleware. )
     let {firstName, lastName, username, password, sex, mobile} = req.body;
 
+    // user info
+    let userDataForRegister = {
+      firstName: firstName,
+      lastName: lastName,
+      username: username,  
+      sex: sex,
+      mobile: mobile
+    }
+
+
     // check username exist
     const userExist = await User.findOne({username: username});
-    if (userExist) return res.status(400).send('This username is already exist');
+    if (userExist) 
+      return res.status(400).render('pages/signup', {
+        message: "This username is already exist",
+        messageClass: "alert-danger",
+        userInfo: userDataForRegister
+      });
 
 
     // check mobile exist
     const mobileExist = await User.findOne({mobile: mobile});
-    if (mobileExist) return res.status(400).send('This number is already exist');
+    if (mobileExist) 
+      return res.status(400).render('pages/signup', {
+        message: "This number is already exist",
+        messageClass: "alert-danger",
+        userInfo: userDataForRegister
+      });
 
     // hash password
     const hashedPassword = await bcrypt.hash(password, saltRounds);
@@ -39,7 +59,10 @@ exports.signUpBlogger = async(req, res) => {
 
     // save user
     const savedUser = await user.save(user);
-    res.status(201).send("created successfully");
+    res.status(201).render("pages/login", {
+      message: "Your account created successfully, please login to continue", 
+      messageClass: "alert-success"
+    });
 
 
 
@@ -62,17 +85,31 @@ exports.loginBlogger = async(req, res) => {
 
     // if username or password is empty
     if (!username || !password) {
-      return res.status(400).render('pages/login', {message: "username or password shouldn't be empty"});
+      return res.status(400).render('pages/login', {
+        message: "username or password shouldn't be empty",
+        messageClass: "alert-danger",
+        username: username
+      });
     }
 
     // check user with this username exist 
     const user = await User.findOne({username: username});
-    if (!user) return res.status(400).render('pages/login', {message: "username does not exist"});
+    if (!user) 
+      return res.status(400).render('pages/login', {
+        message: "username does not exist", 
+        messageClass: "alert-danger",
+        username: username
+      });
     
 
     // checkpassword correct 
     const passwordCorrect = await bcrypt.compare(password, user.password);
-    if (!passwordCorrect) return res.status(400).render('pages/login', {message: "password is not correct"});
+    if (!passwordCorrect) 
+      return res.status(400).render('pages/login', {
+        message: "password is not correct",
+        messageClass: "alert-danger",
+        username: username
+      });
 
 
     
@@ -82,7 +119,7 @@ exports.loginBlogger = async(req, res) => {
 
 
     // should change to 
-    res.send("token sent ");
+    res.redirect("/");
 
 
 
