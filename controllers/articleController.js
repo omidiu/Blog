@@ -15,7 +15,10 @@ exports.allArticles = async(req, res) => {
     // Get all articles (may limit later)
     let articles = await Article.find({});
 
-    return res.send(articles);
+    return res.render('pages/articles/index', {
+      articles
+    });
+
 
   } catch (err) {
     console.log(err);
