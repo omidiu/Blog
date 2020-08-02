@@ -107,6 +107,7 @@ exports.registerForm = (req, res, next) => {
       sex:  Joi
             .string()
             .valid('male', 'female')
+            .required()
             .messages({
               "any.only": 'Sex must be "male" or "female"'
             }),
@@ -130,8 +131,16 @@ exports.registerForm = (req, res, next) => {
   // check data is valid or not
   let {error} = schema.validate(userDataForRegister);
 
+
+
+  
   // if any error render "pages/signup" with proper error message
-  if (error) return res.render('pages/signup', {message: error.details[0].message});
+  if (error) 
+    return res.status(400).render('pages/signup', {
+      message: error.details[0].message, 
+      messageClass: "alert-danger", 
+      userInfo: userDataForRegister
+    });
 
   // no error 
   next();
