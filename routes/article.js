@@ -63,5 +63,13 @@ router.post("/newArticle", validation.authenticateToken, validation.addArticleFo
 
 
 
+/*********************************************************************************
+* edit a article (POST)
+**********************************************************************************/
+router.put("/article/:articleId/edit", validation.authenticateToken, validation.addArticleFormImage, validation.addArticleFormText, ArticleController.editArticle);
+
+
+
+
 
 module.exports = router;
