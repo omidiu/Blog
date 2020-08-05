@@ -1,6 +1,6 @@
 const Article = require("../models/article");
 const User = require('../models/user');
-const helper = require('../tools/helpers');
+const Comment = require('../models/comment');
 const mongoose = require('mongoose');
 
 
@@ -11,12 +11,13 @@ const mongoose = require('mongoose');
 exports.allArticles = async(req, res) => {
 
   try {
-
+    console.log(req.user)
     // Get all articles (may limit later)
     let articles = await Article.find({});
 
     return res.render('pages/articles/index', {
-      articles
+      articles, 
+      user: req.user
     });
 
 
@@ -129,18 +130,23 @@ exports.articleDetail = async(req, res) => {
 
     
     // find article 
+    console.log(articleId);
     let article = await Article.findById({_id: articleId});
     if (!article) res.status(404).render("pages/Notfound") // if article is empty
 
 
+    
 
+    // find comments 
+    let comments = await Comment.find({article: articleId}).populate('author', '-password');
 
-    // #issue
-    // check article exist
-    if (!article) return res.status(404).send("Not found");
+    
+    
+    
 
     res.status(200).render('pages/articles/oneArticle', {
-      article
+      article,
+      comments
     }); // should change to (render article page)
 
 
