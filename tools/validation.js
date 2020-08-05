@@ -229,9 +229,8 @@ exports.editProfileForm = (req, res, next) => {
   let {error} = schema.validate(newUserInfo);
 
   // if any error render "pages/signup" with proper error message
-  if (error) return res.status(400).render('pages/users/edit', {
+  if (error) return res.status(400).json({
     message: error.details[0].message, 
-    messageClass: 'alert-danger'
   });
 
   // no error 
