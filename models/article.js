@@ -17,7 +17,7 @@ const articleSchema = new schema({
   description: {
     type: String,
     required: true,
-    minlength: 10
+    minlength: 70
   },
 
   author: {
