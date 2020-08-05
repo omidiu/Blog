@@ -16,18 +16,20 @@ router.post('/signup', validation.registerForm, UserController.signUpBlogger);
 router.post('/login', UserController.loginBlogger);
 
 
-
 /*********************************************************************************
 * Display Blogger profile page 
+**********************************************************************************/
+router.get("/myProfile", validation.authenticateToken, UserController.bloggerProfilePage);
+
+
+
+/*********************************************************************************
+* Display Blogger Info page 
 **********************************************************************************/
 router.get("/:username", validation.authenticateToken, UserController.bloggerDetailsPage);
 
 
 
-/*********************************************************************************
-* Display edit profile page (GET)
-**********************************************************************************/
-router.get("/:username/editprofile", validation.authenticateToken, UserController.bloggerEditProfilePage); 
 
 
 /*********************************************************************************
