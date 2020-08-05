@@ -1,6 +1,7 @@
 require('dotenv').config();
 
 const User = require('../models/user');
+const Article = require('../models/article');
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt');
 const saltRounds = 8;
@@ -138,7 +139,7 @@ exports.loginBlogger = async(req, res) => {
 
 
 /*********************************************************************************
-* Display Blogger profile page (GET)
+* Display Blogger Info page (GET) (public)
 **********************************************************************************/
 exports.bloggerDetailsPage = async (req, res) => {
   
@@ -150,38 +151,56 @@ exports.bloggerDetailsPage = async (req, res) => {
   if (!user) return res.status(404).send("Not found") // It should change to not found page.
 
   
-  // render user profile page.
-  res.render("pages/users/index", {user: user});
+  // render user profile page. (should change later)
+  res.render("pages/users/index", {
+    user: user
+  });
   
 
 };  
+
 
 
 /*********************************************************************************
-* Display edit profile page (GET)
+* Display Blogger profile page (GET) (private)
 **********************************************************************************/
-exports.bloggerEditProfilePage = async (req, res) => {
+exports.bloggerProfilePage = async (req, res) => {
+
+  try {
+    
+    // get user info
+    let { username, _id }  = req.user;
+    let userId = _id;
+    
+    // check username exist or not
+    let user =  await User.findOne({username: username}).select("-password");
+    if (!user) return res.status(404).send("Not found") // It should change to not found page.
+
+    
+
+    // find number of articles that this user wrote.  
+    let numberOfUserArticles = await Article.countDocuments({author: userId});
+
+
+
+    // render user profile page. (should change later)
+    res.status(200).render('pages/users/profile', {
+      user: user,
+      articleNum: numberOfUserArticles
+      
+    });
+
+
+  } catch (err) {
+    console.log(err);
+    res.status(500).send("Error Occurred");
+  }
   
-  // get username
-  let { username }  = req.params;
-
-  // check username exist or not
-  let user =  await User.findOne({username: username});
-  if (!user) return res.status(404).send("Not found") // It should change to not found page.
-
-
-  // user can just edit his/her profile.
-  // access denied message
-  // if user try see another blogger edit page
-  // (req.user was set in authenticateToken middleware before this)
-  if ( req.params.username !== req.user.username) return res.status(403).send('<h1>Access Denied</h1>');
-  
-  // render user profile page.
-  res.render("pages/users/edit", {user: user});
   
 
+};
 
-};  
+
 
 
 
@@ -204,14 +223,20 @@ exports.editBloggerInfo = async (req, res) => {
 
     // check username exist or not
     let user =  await User.findOne({username: username});
-    if (!user) return res.status(400).send("Bad request") // It should change to not found page.
+    if (!user) 
+      return res.status(400).json({
+        message: "Bad request"
+      })
 
 
     // user can just edit his/her profile.
     // access denied message
     // if user try see another blogger edit page
     // (req.user was set in authenticateToken middleware before this)
-    if ( req.params.username !== req.user.username) return res.status(403).send('<h1>Access Denied</h1>');
+    if ( req.params.username !== req.user.username) 
+      return res.status(403).json({
+        message: "Access denied"
+      });
 
 
     
@@ -221,9 +246,9 @@ exports.editBloggerInfo = async (req, res) => {
     });
 
     
-    res.status(200).render("pages/users/edit", {
-      message: "edited successfully", 
-      messageClass: "alert-success"
+    res.status(200).json({
+      message: "Edited successfully, please refresh the page to see the result",
+      user: updateUserInfo
     });
 
   } catch(err) {
