@@ -1,44 +1,18 @@
 const express = require("express");
 const router = express.Router();
-
-// user model
-const User = require("../models/user");
-
+const commentController = require("../controllers/commentController");
+const validation = require("../tools/validation");
 
 
 
 
-router.get("/", (req, res) => {
-  res.render("signup")
-});
 
 
 
-router.post("/", async (req, res) => {
-  
-  // validation for better user experience here: 
-  // here/
-
-  // if everything is ok code below should run: 
-  let user = new User ({
-    firstName: req.body.firstName, 
-    lastName: req.body.lastName, 
-    username: req.body.username, 
-    password: req.body.password, 
-    sex: req.body.sex, 
-    mobile: req.body.mobile, 
-    role: "blogger" 
-  })
-
-  user.save((err) => {
-    if (err) return console.log(err);
-    console.log("created successfully");
-    res.send("ok");
-  })
-
-  
-
-});
+/*********************************************************************************
+* Add a comment to a specific article (POST) (Not implemented yet)
+**********************************************************************************/
+router.post("/:articleId", validation.authenticateToken, commentController.addCommentToArticle);
 
 
 
