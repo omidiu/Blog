@@ -45,4 +45,20 @@ router.put("/:username/editprofile/changePassword", validation.authenticateToken
 
 
 
+/*********************************************************************************
+* Upload Blogger's profile image POST (Not implemented yet)
+**********************************************************************************/
+router.post("/:username/uploadProfileImage", validation.authenticateToken, validation.addBloggerAvatarImage, UserController.saveBloggerAvatarSrc);
+
+
+
+
+/*********************************************************************************
+* Delete author (also author's "comments" and "articles" ) (DELETE)
+**********************************************************************************/
+router.delete("/:username/deleteAccount", validation.authenticateToken, UserController.deleteBloggerAccount);
+
+
+
+
 module.exports = router;
