@@ -4,10 +4,10 @@ const path = require("path");
 // Set storage engine
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, './public/uploads/userProfile')
+    cb(null, './public/uploads/userAvatar')
   },
   filename: function(req, file, cb) {
-    cb(null, 'userProfile' + '-' + file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+    cb(null, 'userAvatar' + '-' + file.fieldname + '-' + Date.now() + path.extname(file.originalname));
   }
 });
 
