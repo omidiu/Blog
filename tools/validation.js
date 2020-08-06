@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken");
 const User = require('../models/user');
 const bcrypt = require('bcrypt');
 const {uploadArticleImage} = require('./uploadArticleAvatarImage');
+const {uploadBloggerAvatarImage} = require('./uploadBloggerAvatarImage');
 
 /*********************************************************************************
 **********************************************************************************
@@ -393,6 +394,42 @@ exports.redirectToMainPageWithValidtoken = (req, res, next) => {
 };
 
 
+exports.addBloggerAvatarImage = (req, res, next) => {
+
+  // Define upload  (single avatar for article)
+  let upload = uploadBloggerAvatarImage.single('avatar');
+
+  upload(req, res, (err) => {
+
+    if (err){ 
+      res.status(400).json({
+        message: err, 
+        messageClass: 'alert-danger', 
+      });
+
+    } else {
+      if (typeof req.file === 'undefined') {
+        return res.status(400).json({
+          message: "Error: No File selected",
+          messageClass: "alert-danger",
+        })
+      } else {
+        res.locals.filename = req.file.filename;
+        next();
+      }
+      
+    }
+    
+    
+  });
+  
+  // next called inside the upload (last else)
+
+};
+
+
+
+
 
   
 /*********************************************************************************
@@ -440,7 +477,7 @@ exports.addArticleFormImage = (req, res, next) => {
   
   // next called inside the upload (last else)
 
-};  
+};
 
 
 
