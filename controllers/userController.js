@@ -266,10 +266,12 @@ exports.changePassword = async (req, res) => {
 
   try {
       // get new password from req.body
-    let {newPass} = req.body;
+    let {oldPass, newPass} = req.body;
 
     // get username
     let username = req.user.username;
+
+    
 
     // hash new password
     let hashedNewPassword = await bcrypt.hash(newPass, saltRounds);
@@ -279,10 +281,9 @@ exports.changePassword = async (req, res) => {
 
 
     // successful 
-    res.status(200).render('pages/users/edit', {
+    res.status(200).json({
       message: "Your password updated successfully", 
-      messageClass: "alert-success"
-    })
+    });
 
 
   } catch (err) {
