@@ -2,7 +2,7 @@ const Joi = require("@hapi/joi");
 const jwt = require("jsonwebtoken");
 const User = require('../models/user');
 const bcrypt = require('bcrypt');
-const {uploadImage} = require('./uploadArticleAvatarImage');
+const {uploadArticleImage} = require('./uploadArticleAvatarImage');
 
 /*********************************************************************************
 **********************************************************************************
@@ -250,9 +250,8 @@ exports.oldPasswordCorrect = async (req, res, next) => {
   let {oldPass} = req.body;
 
   // check password is not empty
-  if (!oldPass) return res.status(400).send({
-    message: "Your previous password shouldn't be empty", 
-    messageClass: "alert-danger"
+  if (!oldPass) return res.status(400).json({
+    message: "Your old password shouldn't be empty", 
   });
 
   // get username
@@ -267,9 +266,8 @@ exports.oldPasswordCorrect = async (req, res, next) => {
   let passwordCorrect = await bcrypt.compare(oldPass, user.password);
 
   // not correct -> re-render "pages/users/edit" with proper error message.
-  if (!passwordCorrect) return res.status(400).render('pages/users/edit', {
-    message: "Your password is not correct", 
-    messageClass: "alert-danger"
+  if (!passwordCorrect) return res.status(400).json({
+    message: "Your old password is not correct", 
   });
 
   
@@ -285,12 +283,12 @@ exports.oldPasswordCorrect = async (req, res, next) => {
 exports.changePassForm = (req, res, next) => {
 
   // get info from req.body
-  let {newPass, newPass_confirmation} = req.body
+  let {newPass, newPassConfirmation} = req.body
 
   // define {newpass, newPass_confirmation }
   let newPassWithConfirmation = {
     newPass, 
-    newPass_confirmation
+    newPassConfirmation
   }
 
   // Atleast 1 letter, 1 number, 1 special character 
@@ -309,17 +307,19 @@ exports.changePassForm = (req, res, next) => {
                 .pattern(passwordPattern)
                 .required()
                 .messages({
+                  'any.required': "new password shouldn't be empty",
                   "string.min": "Your password should contain at least 8 character",
                   "string.max": "Your password should contain at last 30 character",
                   "string.pattern.base": "Your password should contain special character, at least a letter, at least a number"
                 }),
   
-      newPass_confirmation:  
+      newPassConfirmation:  
                 Joi
                 .any()
                 .valid(Joi.ref('newPass'))
                 .required()
                 .messages({
+                  'any.required': "new password confirmation shouldn't be empty",
                   'any.only': "Please confirm Your password correctly"
                 }),
               
@@ -329,9 +329,8 @@ exports.changePassForm = (req, res, next) => {
   let {error} = schema.validate(newPassWithConfirmation);
 
   // if any error render "pages/signup" with proper error message
-  if (error) return res.status(400).render('pages/users/edit', {
+  if (error) return res.status(400).json({
     message: error.details[0].message,
-    messageClass: "alert-danger"
   });
 
   // no error 
@@ -407,7 +406,7 @@ exports.redirectToMainPageWithValidtoken = (req, res, next) => {
 exports.addArticleFormImage = (req, res, next) => {
 
   // Define upload  (single avatar for article)
-  let upload = uploadImage.single('avatar');
+  let upload = uploadArticleImage.single('avatar');
 
   upload(req, res, (err) => {
     
