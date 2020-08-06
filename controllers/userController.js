@@ -2,6 +2,7 @@ require('dotenv').config();
 
 const User = require('../models/user');
 const Article = require('../models/article');
+const Comment = require('../models/comment');
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt');
 const saltRounds = 8;
@@ -306,11 +307,90 @@ exports.bloggerArticles = (req, res) => {
 
 
 /*********************************************************************************
-* Upload Blogger's profile image POST (Not implemented yet)
+* Upload Blogger's profile image (POST)
 **********************************************************************************/
-exports.uploadImageProfile = (req, res) => {
-  res.send('Not implemented yet: render user/articles.ejs');
+exports.saveBloggerAvatarSrc = async (req, res) => {
+  try {
+    // Get avatar file name; (was set in previous middleware in locals variables) 
+    let avatarSrc = res.locals.filename;
+    let avatarPath = `/uploads/userAvatar/${avatarSrc}`;
+
+    // Get username of user
+    let username = req.user.username
+
+    // Check user can change this username avatar image.
+    if (req.user.username !== req.params.username)
+      return res.status(400).json({
+        message: "Forbidden"
+      });
+
+    
+
+    await User.findOneAndUpdate({username: username}, {imageProfileSrc: avatarPath}, {
+      new: true
+    });
+
+
+    // Send "user avatar src"  
+    res.status(200).json({
+      avatarPath,
+      message: "Your profile avatar changed successfully"
+    });
+
+  } catch (err){
+    console.log(err);
+    return res.status(500).send("Error Occured !")
+  }
+    
 }
+
+
+
+/*********************************************************************************
+* Delete author (also author's "comments" and "articles" )
+**********************************************************************************/
+exports.deleteBloggerAccount = async (req, res) => {
+
+  try {
+    // Get username and _id
+    let username = req.user.username;
+    let userId = req.user._id;
+
+    // Check user can remove this account (changing "req.param.username")
+    if (req.params.username !== req.user.username)
+      return res.status(400).json({
+        message: "Forbidden"
+      });
+
+
+    // Delete user "comments"
+    await Comment.deleteMany({ author: userId });
+
+    // Delete user "articles"
+    await Article.deleteMany({ author: userId });
+
+    // Delete user 
+    await User.deleteOne({username: username});
+
+
+    res.status(200).json({
+      message: "Deleted successfully"
+    })
+
+
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      message: "Error Occur"
+    })
+  }
+  
+  
+  
+
+
+
+};
 
 
 
