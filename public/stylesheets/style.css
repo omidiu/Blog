@@ -1,8 +1,29 @@
 body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-}
+  font-family: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  height: 100%; }
 
 a {
-  color: #00B7FF;
-}
+  color: #00B7FF; }
+
+#container {
+  min-height: 100%;
+  position: relative; }
+
+#body {
+  padding: 10px;
+  padding-bottom: 100px;
+  /* Height of the footer */ }
+
+#footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+  padding: 10px;
+  /* Height of the footer */
+  color: white;
+  background-color: #222222;
+  opacity: 0.9;
+  margin-top: 20px; }
