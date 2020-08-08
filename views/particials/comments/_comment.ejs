@@ -1,0 +1,28 @@
+<div class="media">
+  <!-- Should change later to author avatar image -->
+  <a class="pull-left" href="#"><img class="media-object" src="https://www.bootdey.com/img/Content/avatar/avatar3.png" alt=""></a>
+  <div class="media-body">
+
+      <!-- firstName and lastName of who sent the comment-->
+      <h4 class="media-heading">
+        <%= comment.author.firstName + " " + comment.author.lastName  %>
+      </h4>
+
+      
+      <!-- comment content -->
+      <p>
+        <%= comment.content %> 
+      </p>
+
+      <ul class="list-unstyled list-inline media-detail pull-left">
+
+          <!-- comment date -->
+          <li><i class="fa fa-calendar"></i>
+            <%= comment.createdAt.getFullYear() + "-" + comment.createdAt.getMonth() + "-" + comment.createdAt.getDate() %> 
+          </li>
+
+      </ul>
+
+    
+  </div>
+</div>

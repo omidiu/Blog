@@ -1,0 +1,24 @@
+<div class="post-preview">
+  <div class="row">
+    <div class="col-md-4 image-container">
+      <img class="author-image" src="<%= authorImageSrc %> "  alt="">
+    </div>
+    <div class="col-md-8">
+      <a class="post-link" href="/articles/article/<%= id %>">
+        <h2 class="post-title">
+          <%- title %> 
+        </h2>
+        <h3 class="post-subtitle">
+          <%- subtitle %> 
+        </h3>
+      </a>
+      
+      <p class="post-meta">Posted by
+        <a href="#"><%- authorName %> </a>
+        on <%- date %>
+      </p>
+    </div>
+  </div>
+  
+</div>
+<hr class="seprator-line">

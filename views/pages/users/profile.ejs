@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+  <!-- Bootstrap core CSS -->
+  <link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Custom fonts for this template -->
+  <link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+  <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+  <!-- Custom styles for this template -->
+  <link href="/stylesheets/main.css" rel="stylesheet">
+  
+  <title>all articles</title>
+</head>
+<body>
+
+  <%# Navigation %> 
+  <%- include('../../particials/_navigation2', {login: true}); %>
+
+
+  <%# page header %> 
+  <%- include('../../particials/_header', {
+    title: "Your profile",  
+    backgroundImageSrc: "/images/transparent-bg.png"
+  }); 
+  %>
+
+
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+<div class="container">
+<div class="row flex-lg-nowrap">
+  <div class="col-12 col-lg-auto mb-3" style="width: 200px;">
+    <div class="card p-3">
+      <div class="e-navlist e-navlist--active-bg">
+        <ul class="nav">
+          <li class="nav-item"><a class="nav-link px-2 active" href="./overview.html"><i class="fa fa-fw fa-bar-chart mr-1"></i><span>Overview</span></a></li>
+          <li class="nav-item"><a class="nav-link px-2" href="./users.html"><i class="fa fa-fw fa-th mr-1"></i><span>CRUD</span></a></li>
+          <li class="nav-item"><a class="nav-link px-2" href="./settings.html"><i class="fa fa-fw fa-cog mr-1"></i><span>Settings</span></a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="row">
+      <div class="col mb-3">
+        <div class="card">
+          <div class="card-body">
+            <div class="e-profile">
+              <div class="row">
+                <div class="col-12 col-sm-auto mb-3">
+                  <div class="mx-auto" style="width: 140px;">
+                    <div class="d-flex justify-content-center align-items-center rounded" style="height: 140px; background-color: rgb(233, 236, 239);">
+                      <img src="/uploads/userAvatar/user1.png" alt="image" height="100%" width="100%" id="avatar-img">
+                    </div>
+                    <form id="upload-avatar-photo"> 
+                      <!-- Choose file -->
+                      <input type="file" name="avatar" class="form-control-file form-control-sm mt-2">
+                    </form>
+                    
+                  </div>
+                </div>
+                <div class="col d-flex flex-column flex-sm-row justify-content-between mb-3">
+                  <div class="text-center text-sm-left mb-2 mb-sm-0">
+                    <h4 class="pt-sm-2 pb-1 mb-0 text-nowrap"><%= user.firstName + " " + user.lastName %> </h4>
+                    <!-- User username -->
+                    <p class="mb-0">@<%= user.username %> </p>
+                    
+                    <!-- User sex and mobile number -->
+                    <div class="text-muted"><small><%= user.sex + " - " + user.mobile %> </small></div>
+                    <div class="mt-2">
+                      
+                      <button class="btn btn-primary" type="button" id="set-photo-btn">
+                        <i class="fa fa-fw fa-camera"></i>
+                        <span>Set Photo</span>
+                      </button>
+
+                      
+                    </div>
+                  </div>
+                  <div class="text-center text-sm-right">
+                    <span class="badge badge-secondary">Blogger</span>
+
+                    <!-- When user joined -->
+                    <div class="text-muted"><small>
+                      Joined <%= user.createdAt.getDay() %>
+                      <% var monthNames = ["January", "February", "March", "April", "May", "June",
+                        "July", "August", "September", "October", "November", "December"
+                      ];  %> 
+                      <%= monthNames[user.createdAt.getMonth()] %>  2017
+
+                      
+                    </small></div>
+                  </div>
+                </div>
+              </div>
+
+
+              <!-- Display Error message -->
+              <div class="alert d-none" id="form-error">
+                
+              </div>
+
+
+              <!-- Choose between "Edit" and "Change password" panel -->
+              <ul class="nav nav-tabs">
+                <li class="nav-item pointer" id="edit-profile-panel"><a class="nav-link">Edit</a></li>
+                <li class="nav-item pointer" id="change-password-panel"><a class="nav-link">Change password</a></li>
+              </ul>
+
+              <!-- Edit and change pass section -->
+              <div class="tab-content p-5">
+                <div class="tab-pane active">
+                  <form class="form" id="edit-or-change-pass">
+
+                    
+                    <!-- Edit profile -->
+                    <div class="row d-none" id="edit-profile-card">
+                      <div class="col">
+
+                        <div class="row">
+
+                          <!-- First name -->
+                          <div class="col">
+                            <div class="form-group">
+                              <label>First name</label>
+                              <input class="form-control" type="text" name="firstName" placeholder="<%- user.firstName %>" value="<%- user.firstName %>">
+                            </div>
+                          </div>
+
+
+                          <!-- Last name -->
+                          <div class="col">
+                            <div class="form-group">
+                              <label>Last name</label>
+                              <input class="form-control" type="text" name="lastName" placeholder="<%- user.lastName %>" value="<%- user.lastName %>">
+                            </div>
+                          </div>
+                          
+
+                        </div>
+
+                        <!-- sex -->
+                        <div class="row">
+                          <div class="col">
+                            <label>Sex</label>
+                            <select class="form-control" name="sex">
+                              <option value="male" <% if (user.sex === "male") {%> selected <% } %>  > male</option>
+                              <option value="female" <% if (user.sex === "female") {%> selected <% } %> > female</option>
+                            </select>
+                          </div>
+                        </div>
+
+
+                        <!-- mobile -->
+                        <div class="row mt-2">
+                          <div class="col">
+                            <div class="form-group">
+                              <label>Mobile</label>
+                              <input class="form-control" type="text" name="mobile" placeholder="<%- user.mobile %>" value="<%- user.mobile %>">
+                            </div>
+                          </div>
+                        </div>
+
+
+
+                      </div>
+                    </div>
+
+                    <!-- Change password -->
+                    <div class="row d-none" id="change-password-card">
+                      <div class="col-12 col-sm-6 mb-3">
+                        <div class="row">
+                          <div class="col">
+                            <div class="form-group">
+                              <label>Current Password</label>
+                              <input class="form-control" name="old-pass" type="password" placeholder="••••••">
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col">
+                            <div class="form-group">
+                              <label>New Password</label>
+                              <input class="form-control" name="new-pass" type="password" placeholder="••••••">
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col">
+                            <div class="form-group">
+                              <label>Confirm <span class="d-none d-xl-inline">Password</span></label>
+                              <input class="form-control" name="new-pass-confirmation" type="password" placeholder="••••••"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+
+                    <!-- Button for submit changes -->
+                    <div class="row d-none mt-3" id="submit-container">
+                      <div class="col d-flex justify-content-end">
+                        <button class="btn btn-primary" type="submit" id="submit-btn"></button>
+                      </div>
+                    </div>
+
+
+
+                  </form>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-12 col-md-3 mb-3">
+        <div class="card mb-3">
+          <div class="card-body">
+            <div class="px-xl-3">
+
+              <!-- Logout -->
+              <button id="logout-btn" class="btn btn-block btn-secondary"> 
+                <i class="fa fa-sign-out"></i> 
+                <span>Logout</span> 
+              </button>
+
+              <!-- Delete -->
+              <button class="btn btn-block btn-danger" data-toggle="modal" data-target="#deleteModal">
+                <!-- <i class="fa fa-sign-out"></i> -->
+                <span>Delete</span>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-body">
+            <h6 class="card-title font-weight-bold">Feed</h6>
+            <p class="card-text">You have currently <%- articleNum %> articles </p>
+            <button type="button" class="btn btn-primary">My Articles</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Alert</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Are you sure? 
+        <br>
+        <span style="font-size: 10px;">(All of your comments and articles will delete)</span>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">No</button>
+        <button type="button" id="delete-account-btn" class="btn btn-danger">
+          Yes 
+          <span style="font-size: 5px;">(Delete anyway)</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const username = '<%- user.username %>';
+</script>
+
+  <!-- Bootstrap core JavaScript -->
+  <script src="/vendor/jquery/jquery.min.js"></script>
+  <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Custom scripts for this template -->
+  <script src="/javascripts/clean-blog.min.js"></script>
+  <script src="/javascripts/profile.js"></script>
+  
+</body>
+</html>

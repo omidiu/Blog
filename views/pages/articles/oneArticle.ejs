@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+  <!-- Bootstrap core CSS -->
+  <link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Custom fonts for this template -->
+  <link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+  <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+  <!-- Custom styles for this template -->
+  <link href="/stylesheets/main.css" rel="stylesheet">
+
+  <title><%= article.title %> </title>
+</head>
+<body>
+  
+
+
+  <%# Navigation %> 
+  <%- include('../../particials/_navigation2', {login: true}); %>
+
+
+  <%# page header %> 
+  <%- include('../../particials/_header', {
+    title: `${article.title}`, 
+    subtitle: "by omid", 
+    backgroundImageSrc: "/uploads/articleAvatar/article21.png"
+  }); 
+  %>
+
+
+  <%# article %>
+  
+  <div class="container one-post-container">
+    <div class="row">
+      <div class="col-md-2">
+        <img class="author-image" src="/uploads/userProfile/user1.png" alt="">
+      </div>
+      <div class="col-md-10 position-relative"> 
+        <p class="post-meta position-absolute">Posted by 
+          <a href="#"> Alex Standal </a> 
+          on September 24, 2019
+        </p>
+      </div>
+    </div>
+    <!-- seprator -->
+    <div class="row">
+      <div class="col-md-8">
+        <hr class="seprator-line">
+      </div>
+    </div>
+    
+    <div class="row">
+      <div class="col-md-8">
+        <div class="post-content">
+          <%- article.description %> 
+        </div>
+      </div>
+    </div>
+
+    <!-- seprator -->
+    <div class="row">
+      <div class="col-md-8">
+        <hr class="seprator-line">
+      </div>
+    </div>
+
+
+    <!-- comments -->
+    <section class="content-item col-md-8" id="comments">
+        <div class="container">         
+          <div class="row">
+                <div class="col-sm-12">   
+
+                    <div class="alert" id="comment-alert">
+                      
+                    </div>
+
+                    <!-- add new comment -->
+                    <%- include('../../particials/comments/_newComment') %> 
+                    
+                    <!-- number of comments -->
+                    <h3><%= comments.length %>  Comments</h3>
+                    
+
+
+                    <!-- COMMENTS - START -->
+                    <% comments.forEach(comment => { %>
+                      <%- include('../../particials/comments/_comment', {comment}) %> 
+                    <% }) %>
+                    
+                    <!-- COMMENTs - END -->
+                
+                </div>
+            </div>
+        </div>
+    </section>
+      
+    
+  </div>
+
+
+  
+
+
+
+
+
+
+
+
+  <script>
+    const articleId = '<%- article._id %>';
+  </script>
+
+
+  <!-- Bootstrap core JavaScript -->
+  <script src="/vendor/jquery/jquery.min.js"></script>
+  <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Custom scripts -->
+  <script src="/javascripts/clean-blog.min.js"></script>
+  <script src="/javascripts/comment.js"></script>
+</body>
+</html>
