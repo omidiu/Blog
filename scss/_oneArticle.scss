@@ -1,0 +1,50 @@
+.one-post-container {
+  
+  
+  // @media only screen and (min-width: 768px) {
+  //   > a {
+  //     > .post-title {
+  //       font-size: 36px;
+  //     }
+  //   }
+  // }
+
+  img.author-image {
+    width: 160px ;
+    height: 140px;
+    border-radius: 50%;
+  }
+
+
+
+
+
+  .post-meta {
+    bottom: 0;
+    
+    font-size: 18px;
+    font-style: italic; 
+    color: $gray-600;
+    > a {
+      text-decoration: none;
+      color: $gray-900;
+      &:focus,
+      &:hover {
+        text-decoration: underline;
+        color: $primary;
+      }
+    }
+  }
+
+  hr.seprator-line {
+    margin: 20px 0 50px;
+    width: 100%;
+  }
+
+  .post-content {
+    margin-top: 20px;
+  }
+
+
+
+}
